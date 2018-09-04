@@ -29,7 +29,7 @@ function formatParams (data) {
   for (let name in data) {
     arr.push(encodeURIComponent(name) + '=' + encodeURIComponent(data[name]))
   }
-  arr.push(('v=' + Math.random()).replace('.'))
+  arr.push(('v=' + Math.random()).replace('0.', ''))
   return arr.join('&')
 }
 

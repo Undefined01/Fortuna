@@ -1,4 +1,4 @@
-# Fortuba -- backend
+# Fortuna -- backend
 
 > Backend of Fortuna Score Query System (for TungWah Senior High School)
 >
@@ -6,32 +6,19 @@
 
 #### 构建
 
-编译时请将三个`go`文件同时编译，像下面这样
+请使用`make`编译。
 
 ``` bash
-go build main.go getter.go http.go
+make
 ```
 
-#### API
+#### 文档
 
-#####`getter.go`主要向后端提供API。
+请使用`godoc`查看。
 
-+ **GetExamList**
-  获取考试列表
-  没有参数，返回`[]string`，为考试列表。
+[![GoDoc](https://godoc.org/github.com/Undefined01/Fortuna/backend?status.svg)](https://godoc.org/github.com/Undefined01/Fortuna/backend)
 
-+ **GetScoreList**
-  获取每个人某一科的总分数
-  三个参数，分别为`考试名称`，`班级`（要有前置零），`科目`。
-  返回`map[string][3]float32`，map的键为每个人的名称，值分别为每个人该科的主观得分、客观得分和总分数。
-
-+ **GetSubscore**
-
-  获取每个人某一科的主观题小题分数
-  三个参数，分别为`考试名称`，`班级`（要有前置零），`科目`。
-  返回`map[string]map[int]float32`，外层map的键为每个人的名称，内层map为题目编号，值为该小题的得分。
-
-##### `main.go`主要向前端提供API。
+#### 前端API。
 
 访问`/api`即可。
 
@@ -41,4 +28,6 @@ go build main.go getter.go http.go
   + `exam`：考试列表
   + `score`：单科得分
   + `subscore`：单科小题分
-+ `exam`、`subject`、`class`：在查询*单科得分*和*单科小题分*时才会使用到，分别对应考试名称、班级（需要前置0）、科目
+  + `examdata`：一场考试某一班级的全部数据
++ `exam`、`class`、`subject`：在查询*单科得分*和*单科小题分*时才会使用到，分别对应考试名称、班级（需要前置0）、科目
++ 在调用`examdata`的时候不需要传递`subject`参数。

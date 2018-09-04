@@ -1,0 +1,14 @@
+{
+  "name": "fortuna",
+  "version": "1.0.0",
+  "description": "Fortuna Score Query System for TungWah (Shell)",
+  "author": "Undefined01 <amoscr@163.com>",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^2.0.0"
+  }
+}

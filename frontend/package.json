@@ -1,7 +1,7 @@
 {
   "name": "fortuna",
   "version": "1.0.0",
-  "description": "Fortuna Score Query System for TungWah",
+  "description": "Fortuna Score Query System for TungWah (Client)",
   "author": "Undefined01 <amoscr@163.com>",
   "private": true,
   "scripts": {
@@ -11,7 +11,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "element-ui": "^2.3.4",
+    "element-ui": "^2.4.0",
     "vue": "^2.5.2"
   },
   "devDependencies": {

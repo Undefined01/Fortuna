@@ -1,0 +1,26 @@
+language: go
+go:
+ - 1.10.x
+branches:
+ - master
+
+sudo: required
+addons:
+ apt:
+  update: true
+
+env:
+ global:
+  - Repo_Path: github.com/Undefined01/fortuna
+  - Deploy_Branch: build
+ matrix:
+  - CI_JOB: build
+
+before_install:
+ - chmod +x ./utils.sh 
+
+install: ./utils.sh deps
+
+script: ./utils.sh ${CI_JOB}
+ 
+after_success: ./utils.sh upload

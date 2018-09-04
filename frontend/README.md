@@ -1,6 +1,8 @@
-# fortuna
+# Fortuna -- frontend
 
-> Fortuna Score Query System for TungWah
+> Frontend of Fortuna Advanced Score Query System (for TungWah Senior High School)
+>
+> Fortuna 成绩查询系统前端
 
 ## Build Setup
 
