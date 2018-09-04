@@ -1,19 +1,13 @@
-# FASQS
+# Fortuna
 
-> Fortuna Advanced Score Query System (for TungWah Senior High School)
+> Fortuna Score Query System (for TungWah Senior High School)
 >
-> Fortuna——增强版成绩查询系统（for 东华高级中学）
+> Fortuna 成绩查询系统（for 东华高级中学）
 
 #### 使用方法
 
-启动`patch.exe`
+该成绩查询系统分为前端和后端。
 
-程序会自动爬取2016级高二的考试列表（暂时写死在程序中，无法选择）
+使用时请在[Releases](https://github.com/Undefined01/fortuna/releases)中下载发布的版本。
 
-输入需要爬取的考试编号
-
-会自动在当前目录下生成`result.csv`文件
-
-程序不会自动覆盖旧的`result.csv`
-
-每次需要爬取新的考试时需要手动删除该文件
+解压后请启动`main.exe`，然后使用浏览器访问[本地的8081端口](http://localhost:8081)即可。
