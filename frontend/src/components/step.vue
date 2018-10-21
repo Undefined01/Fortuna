@@ -1,13 +1,18 @@
 <template>
   <div class="step">
-    <span class="step_id">{{ this.id }}</span>
-    <slot></slot>
+    <span class="step_id">{{ id }}</span>
+    <slot/>
   </div>
 </template>
 <script>
 export default {
-  name: 'step',
-  props: ['id']
+  name: 'Step',
+  props: {
+    id: {
+      type: Number,
+      default: 1
+    }
+  }
 }
 </script>
 <style scoped>

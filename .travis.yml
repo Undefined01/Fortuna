@@ -1,26 +1,26 @@
 language: go
 go:
- - 1.10.x
+  - 1.10.x
 branches:
- - master
+  - master
 
 sudo: required
-addons:
- apt:
-  update: true
-
-env:
- global:
-  - Repo_Path: github.com/Undefined01/fortuna
-  - Deploy_Branch: build
- matrix:
-  - CI_JOB: build
 
 before_install:
- - chmod +x ./utils.sh 
+  - chmod +x ./utils.sh
 
 install: ./utils.sh deps
 
-script: ./utils.sh ${CI_JOB}
- 
-after_success: ./utils.sh upload
+script: ./utils.sh build
+
+before_deploy:
+ - git push https://${GitHub_Token}@github.com/Undefined01/fortuna --delete tag staging
+ - git tag --delete staging
+ - git tag staging
+
+deploy:
+  provider: releases
+  api_key: ${GitHub_Token}
+  file_glob: true
+  file: upload/*
+  skip_cleanup: true

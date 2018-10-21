@@ -1,16 +1,19 @@
 <template>
-  <div class="outter" :style="outter">
+  <div
+    :style="outter"
+    class="outter">
     <div class="inner">
-      <slot></slot>
+      <slot/>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'expender',
+  name: 'Expender',
   props: {
     width: {
+      type: String,
       default: '100%'
     }
   },

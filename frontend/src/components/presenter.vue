@@ -1,13 +1,13 @@
 <template>
   <el-table
     :data="tableData"
+    :summary-method="getAverage"
+    :default-sort="{prop: '总分', order: 'descending'}"
+    :height="windowSize.height * 0.95 + 'px'"
+    :max-height="windowSize.height * 0.95 + 'px'"
     border
     stripe
     show-summary
-    :summary-method="getAverage"
-    :default-sort="{prop: '总分', order: 'descending'}"
-    :height="this.windowSize.height * 0.95 + 'px'"
-    :max-height="this.windowSize.height * 0.95 + 'px'"
     style="width: 100%">
     <el-table-column
       v-for="(item, index) in data.Cols"
@@ -15,8 +15,7 @@
       :prop="item"
       :label="item"
       sortable
-      min-width="40px">
-    </el-table-column>
+      min-width="40px"/>
   </el-table>
 </template>
 
@@ -27,7 +26,8 @@ import 'element-ui/lib/theme-chalk/table.css'
 import 'element-ui/lib/theme-chalk/table-column.css'
 
 export default {
-  name: 'presenter',
+  name: 'Presenter',
+  components: { elTable, elTableColumn },
   props: {
     data: {
       type: Object,
@@ -69,8 +69,7 @@ export default {
 
       return result
     }
-  },
-  components: { elTable, elTableColumn }
+  }
 }
 </script>
 

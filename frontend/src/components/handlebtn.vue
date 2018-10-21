@@ -1,14 +1,21 @@
 <template>
-  <button :class="'btn btn-' + this.parm.color"
+  <button
+    :class="'btn btn-' + parm.color"
     @click="handler">
     <div>
-      <div class="hidden">{{ this.parm.text }}</div>
-      <transition :name="this.parm.transition">
-        <div class="text" v-if="this.odd" key="text1">
-          {{ this.text1 }}
+      <div class="hidden">{{ parm.text }}</div>
+      <transition :name="parm.transition">
+        <div
+          v-if="odd"
+          key="text1"
+          class="text">
+          {{ text1 }}
         </div>
-        <div class="text" v-else key="text2">
-          {{ this.text2 }}
+        <div
+          v-else
+          key="text2"
+          class="text">
+          {{ text2 }}
         </div>
       </transition>
     </div>
@@ -17,8 +24,13 @@
 
 <script>
 export default {
-  name: 'btn',
-  props: ['parm'],
+  name: 'Btn',
+  props: {
+    parm: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       text1: this.parm.text,

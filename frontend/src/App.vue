@@ -3,31 +3,46 @@
     <h2 class="title">成绩查询</h2>
     <step id="1">
       <h4>选择班级：</h4>
-      <el-select v-model="query.class" placeholder="请选择">
+      <el-select
+        v-model="query.class"
+        placeholder="请选择">
         <el-option
-          v-for="(item, index) in classList" :key="index" :label="item" :value="item">
-        </el-option>
+          v-for="(item, index) in classList"
+          :key="index"
+          :label="item"
+          :value="item"/>
       </el-select>
     </step>
 
     <step id="2">
       <h4>选择考试：</h4>
-      <el-select v-model="query.exam" placeholder="请选择">
+      <el-select
+        v-model="query.exam"
+        placeholder="请选择">
         <el-option
-          v-for="(item, index) in examList" :key="index" :label="item" :value="item">
-        </el-option>
+          v-for="(item, index) in examList"
+          :key="index"
+          :label="item"
+          :value="item"/>
       </el-select>
     </step>
 
     <step id="3">
       <h4>选择操作：</h4>
-      <btn @click="btnQueryClick" default="查询成绩"></btn>
-      <btn @click="btnExpendClick" default="扩展显示区域"></btn>
+      <btn
+        default="查询成绩"
+        @click="btnQueryClick"/>
+      <btn
+        default="扩展显示区域"
+        @click="btnExpendClick"/>
     </step>
     <expender :width="expend ? '95vw' : '100%'">
       <el-tabs type="border-card">
-        <el-tab-pane v-for="(table, index) in data" :key="index" :label="table.Title">
-          <presenter :data="table"></presenter>
+        <el-tab-pane
+          v-for="(table, index) in data"
+          :key="index"
+          :label="table.Title">
+          <presenter :data="table"/>
         </el-tab-pane>
       </el-tabs>
     </expender>
@@ -56,6 +71,7 @@ import presenter from '@/components/presenter'
 
 export default {
   name: 'App',
+  components: { elSelect, elOption, elTabs, elTabPane, step, btn, expender, presenter },
   data () {
     return {
       classList: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'],
@@ -86,7 +102,7 @@ export default {
       btn.changeStatus(1)
       ajax({
         url: 'http://localhost:8081/api',
-        data: {type: 'examdata', exam: this.query.exam, class: this.query.class},
+        data: { type: 'examdata', exam: this.query.exam, class: this.query.class },
         success: (res) => {
           if (res !== '[]') this.data = JSON.parse(res)
           btn.changeStatus(2)
@@ -103,8 +119,7 @@ export default {
         btn.changeStatus(0)
       }, 500)
     }
-  },
-  components: { elSelect, elOption, elTabs, elTabPane, step, btn, expender, presenter }
+  }
 }
 </script>
 
