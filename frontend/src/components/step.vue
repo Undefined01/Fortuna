@@ -9,8 +9,8 @@ export default {
   name: 'Step',
   props: {
     id: {
-      type: Number,
-      default: 1
+      type: String,
+      default: '1'
     }
   }
 }
@@ -18,25 +18,21 @@ export default {
 <style scoped>
 .step {
   position: relative;
-  margin-bottom: 20px;
-  padding: 15px;
-  padding-left: 30px;
-
+  margin-bottom: 2rem;
+  padding: 1rem;
   background-color: #eee;
   border-left: 5px solid #0af;
 }
 .step_id {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  top: 10px;
-  left: -13px;
-
+  width: 1.2rem;
+  height: 1.2rem;
+  top: 1.1rem;
+  left: -.8rem;
   color: white;
   background-color: #0af;
-  border-radius: 100%;
-
   text-align: center;
-  line-height: 20px;
+  line-height: 1.1rem;
+  border-radius: 100%;
 }
 </style>

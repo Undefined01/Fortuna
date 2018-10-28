@@ -1,6 +1,6 @@
 {
   "name": "fortuna",
-  "version": "1.0.0",
+  "version": "0.4.0",
   "description": "Fortuna Score Query System for TungWah (Shell)",
   "author": "Undefined01 <amoscr@163.com>",
   "private": true,
@@ -9,6 +9,6 @@
     "start": "electron ."
   },
   "devDependencies": {
-    "electron": "^2.0.0"
+    "electron": "^3.0.0"
   }
 }

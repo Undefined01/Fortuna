@@ -1,28 +1,23 @@
 const { app, BrowserWindow } = require('electron')
-const childprocess = require('child_process')
+const childProcess = require('child_process')
 const path = require('path')
-const url = require('url')
 
 let mainWindow
 let backend
 
-function init() {
-  backend = childprocess.spawn(
+function init () {
+  backend = childProcess.spawn(
     path.resolve(__dirname, 'backend.exe'), [],
-    {cwd: path.resolve(__dirname)}
+    { cwd: path.resolve(__dirname) }
   )
 
-  mainWindow = new BrowserWindow({width: 4000, height: 3000, windowsHide: true})
-  mainWindow.maximize()
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
+  mainWindow = new BrowserWindow({ width: 4000, height: 3000 })
+  // win.webContents.openDevTools()
+  mainWindow.loadFile('index.html')
   mainWindow.on('closed', quit)
 }
 
-function quit() {
+function quit () {
   backend.kill()
   app.quit()
 }

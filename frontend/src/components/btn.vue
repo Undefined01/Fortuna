@@ -52,7 +52,7 @@ export default {
 
       this.odd = !this.odd
     },
-    changeStatus (status) {
+    changeState (status) {
       if (status === 0) {
         this.changeText(this.default, 'primary', 'down')
       }
@@ -61,11 +61,11 @@ export default {
       }
       if (status === 2) {
         this.changeText(this.default + '成功', 'success', 'up')
-        setTimeout(() => this.changeStatus(0), 1500)
+        setTimeout(() => this.changeState(0), 1500)
       }
       if (status === 3) {
         this.changeText(this.default + '失败', 'danger', 'up')
-        setTimeout(() => this.changeStatus(0), 1500)
+        setTimeout(() => this.changeState(0), 1500)
       }
     },
     handler () {
@@ -73,8 +73,8 @@ export default {
         changeText: (text, color, transition) => {
           this.changeText(text, color, transition)
         },
-        changeStatus: (status) => {
-          this.changeStatus(status)
+        changeState: (status) => {
+          this.changeState(status)
         }
       })
     }
@@ -84,6 +84,51 @@ export default {
 
 <style scoped>
 .hidden { opacity: 0; }
+
+.btn-primary {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background-color: #0069d9;
+  border-color: #0062cc;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
+
+.btn-success {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+.btn-success:hover, .btn-success:focus {
+  background-color: #218838;
+  border-color: #1e7e34;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+}
+
+.btn-warning {
+  color: #212529;
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+.btn-warning:hover, .btn-warning:focus {
+  background-color: #e0a800;
+  border-color: #d39e00;
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5);
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+.btn-danger:hover, .btn-danger:focus {
+  background-color: #c82333;
+  border-color: #bd2130;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5);
+}
+
 .btn > div {
   position: relative;
   overflow: hidden;

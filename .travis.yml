@@ -15,7 +15,7 @@ script: ./utils.sh build
 
 before_deploy:
  - git push https://${GitHub_Token}@github.com/Undefined01/fortuna --delete tag staging
- - git tag --delete staging
+ - git tag --delete staging || echo No previous releases
  - git tag staging
 
 deploy:

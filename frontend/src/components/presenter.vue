@@ -1,84 +1,43 @@
 <template>
-  <el-table
-    :data="tableData"
-    :summary-method="getAverage"
-    :default-sort="{prop: '总分', order: 'descending'}"
-    :height="windowSize.height * 0.95 + 'px'"
-    :max-height="windowSize.height * 0.95 + 'px'"
-    border
-    stripe
-    show-summary
-    style="width: 100%">
-    <el-table-column
-      v-for="(item, index) in data.Cols"
-      :key="index"
-      :prop="item"
-      :label="item"
-      sortable
-      min-width="40px"/>
-  </el-table>
+  <div v-if="data.length === 0">
+    <div class="text-center non-data-tip">
+      没有数据
+    </div>
+  </div>
+  <div v-else>
+    <el-tabs type="border-card">
+      <el-tab-pane
+        v-for="(table, index) in data"
+        :key="index"
+        :label="table.Title">
+        <sheet :data="table"/>
+      </el-tab-pane>
+    </el-tabs>
+  </div>
 </template>
-
 <script>
-import elTable from 'element-ui/lib/table'
-import elTableColumn from 'element-ui/lib/table-column'
-import 'element-ui/lib/theme-chalk/table.css'
-import 'element-ui/lib/theme-chalk/table-column.css'
+import sheet from '@/components/sheet'
+
+import elTabs from 'element-ui/lib/tabs'
+import elTabPane from 'element-ui/lib/tab-pane'
+import 'element-ui/lib/theme-chalk/tabs.css'
+import 'element-ui/lib/theme-chalk/tab-pane.css'
 
 export default {
   name: 'Presenter',
-  components: { elTable, elTableColumn },
+  components: { elTabs, elTabPane, sheet },
   props: {
     data: {
-      type: Object,
+      type: Array,
       required: true
-    }
-  },
-  computed: {
-    tableData () {
-      let res = []
-      for (let i in this.data.Data) {
-        let row = {}
-        for (let k in this.data.Data[i]) {
-          row[this.data.Cols[k]] = this.data.Data[i][k]
-        }
-        res.push(row)
-      }
-      return res
-    },
-    windowSize () {
-      return {
-        width: document.documentElement.clientWidth,
-        height: document.documentElement.clientHeight
-      }
-    }
-  },
-  methods: {
-    getAverage (param) {
-      const { columns, data } = param
-      const result = ['平均分']
-      columns.forEach((column, index) => {
-        if (index === 0) return
-        const values = data.map(item => Number(item[column.property]))
-        if (!values.every(value => isNaN(value))) {
-          let sum = 0
-          values.some(item => { sum += item })
-          result[index] = (sum / values.length).toFixed(2)
-        } else result[index] = ''
-      })
-
-      return result
     }
   }
 }
 </script>
-
-<style>
-.el-table__header th, .el-table td {
-  padding-top: 0;
-  padding-bottom: 0;
-}
-.el-table_1_column_2 {
-  min-width: 60px!important;
+<style scoped>
+.non-data-tip {
+  padding: 5rem;
+  box-shadow: inset 0 0 2px 0 black;
+  background-color: #f8f8f8;
 }
 </style>
