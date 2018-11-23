@@ -1,21 +1,22 @@
-package summary
+package summary // 成绩汇总模块
 
 import (
 	"github.com/Undefined01/fortuna/backend/importer"
 )
 
+// 成绩汇总核心
 type Summary struct {
 	count   int
 	tables  []importer.Table
-	summary importer.TableMap
+	summary importer.RawTable
 }
 
 func New() *Summary {
 	// 最终表格，第一个是汇总
 	return &Summary{
-		0,
-		make([]importer.Table, 1, 20),
-		importer.TableMap{
+		count:  0,
+		tables: make([]importer.Table, 1, 20),
+		summary: importer.RawTable{
 			append(make([]string, 0, 20), "学号", "姓名"),
 			make(map[int][]interface{}),
 		},
@@ -52,49 +53,4 @@ func (this *Summary) Result() []importer.Table {
 
 	this.tables[0] = this.summary.Transform("总分")
 	return this.tables
-}
-
-// 获取某一场考试某一班级的全部信息
-// 参数：考试名称，班级（需带前置0）
-// 返回：得分列表
-func GetExamData(exam string, class string) []importer.Table {
-	summary := New()
-	urlPrefix := "http://192.168.206.6/20162018"
-	termInfo := "year_in=2016&grade_name=%B8%DF%C8%FD&class_name1=2018-2019%C9%CF%D1%A7%C6%DA"
-	eco := &importer.FromWebsite{
-		ExamUrl:     []byte(urlPrefix + "/dk/top.asp?" + termInfo),
-		ScoreUrl:    []byte(urlPrefix + "/dk/bottom_list_new.asp?" + termInfo),
-		SubscoreUrl: []byte(urlPrefix + "/exam_a_p_g/bottom_list.asp?" + termInfo),
-	}
-
-/*
-	urlPrefix := "http://192.168.1.88/2016abc"
-	termInfo := "year_in=2016&grade_name=%B8%DF%C8%FD&class_name1=2018-2019%C9%CF%D1%A7%C6%DA"
-	east := &importer.FromWebsite{
-		ExamUrl:     []byte(urlPrefix + "/dk/top.asp?" + termInfo),
-		ScoreUrl:    []byte(urlPrefix + "/dk/bottom_list_new.asp?" + termInfo),
-		SubscoreUrl: []byte(urlPrefix + "/exam_a_p_g/bottom_list.asp?" + termInfo),
-	}
-*/
-
-	sum := make(importer.ScoreMap)
-	add := func (subject string) {
-		score, subscore := eco.Get(exam, class, subject)
-		summary.Add(subject, score, subscore)
-		sum.Add(score)
-	}
-	// 添加科目
-	add("语文")
-	add("数学理")
-	add("英语")
-	add("物理")
-	add("化学")
-	add("生物")
-	// 单独添加理科综合，防止重复计分
-	score, subscore := eco.Get(exam, class, "理科综合")
-	summary.Add("理科综合", score, subscore)
-
-	summary.Add("总分", sum.Transform(), nil)
-
-	return summary.Result()
 }

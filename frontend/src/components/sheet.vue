@@ -7,7 +7,8 @@
       border
       stripe
       show-summary
-      class="maximize">
+      class="maximize"
+      height="85vh">
       <el-table-column
         v-for="(item, index) in data.Cols"
         :key="index"
@@ -100,5 +101,8 @@ export default {
 }
 .el-table_1_column_2 {
   min-width: 60px!important;
+}
+.el-table__body-wrapper {
+  overscroll-behavior: contain;
 }
 </style>

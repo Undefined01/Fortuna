@@ -1,19 +1,20 @@
 <template>
   <div class="main-stage flex-column scroll-y">
     <div class="box-effect">
-      <h2 class="container">Fortuna 成绩查询系统</h2>
+      <h2 class="container">成绩查询</h2>
     </div>
     <div class="container box-effect content">
       <selector @selected="query" />
       <expender :width="data.length == 0 ? '100%' : '98vw'">
+        <a
+          ref="anchor"
+          href="#anchor"
+        />
+        <a name="anchor" />
         <presenter :data="data" />
       </expender>
     </div>
-    <div class="secondary text-center">
-      Powered by Fortuna v0.4
-      <br>
-      Maintained by Hans Lee
-    </div>
+    <div class="secondary text-center">Powered by Fortuna v0.4</div>
   </div>
 </template>
 
@@ -35,11 +36,11 @@ export default {
   methods: {
     query (queryParam, changeState) {
       changeState(1)
-      ajax.get('http://127.0.0.1:8081/api', {
-        type: 'examdata',
+      ajax.get('http://127.0.0.1:8081/api/examdata', {
         exam: queryParam.exam,
         class: queryParam.class
       }).then(res => {
+        this.$refs.anchor.click()
         this.data = JSON.parse(res)
         changeState(2)
       }).catch(() => {

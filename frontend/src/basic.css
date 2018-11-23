@@ -30,6 +30,7 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  scroll-behavior: smooth;
 }
 .scroll-y {
   overflow-y: auto;

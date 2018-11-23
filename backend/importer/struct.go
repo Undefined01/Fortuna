@@ -5,17 +5,18 @@ import "sort"
 // 前端所需要的主要数据格式
 type Table struct {
 	Title string
-	Cols []string
-	Data [][]interface{}
+	Cols  []string
+	Data  [][]interface{}
 }
 
-// 中间层，用于数据的再加工
-type TableMap struct {
+// 原始小题分数据，用于数据的再加工
+type RawTable struct {
 	Cols []string
 	Data map[int][]interface{}
 }
 
-func (this TableMap) Transform(title string) Table {
+// 将数据加工为最终数据
+func (this RawTable) Transform(title string) Table {
 	data := make([][]interface{}, 0, 30)
 	for _, v := range this.Data {
 		data = append(data, v)
@@ -44,6 +45,7 @@ type Score struct {
 }
 
 type ScoreList []Score
+
 func (this ScoreList) Len() int           { return len(this) }
 func (this ScoreList) Less(i, j int) bool { return this[i].Total > this[j].Total }
 func (this ScoreList) Swap(i, j int)      { this[i], this[j] = this[j], this[i] }
@@ -54,18 +56,20 @@ func (this ScoreList) ReRank() {
 	sort.Sort(this)
 	this[0].Rank = 1
 	for i, _ := range this {
-		if i!=0 {
+		if i != 0 {
 			if this[i].Total == this[i-1].Total {
 				this[i].Rank = this[i-1].Rank
 			} else {
-				this[i].Rank = i+1
+				this[i].Rank = i + 1
 			}
 		}
 	}
 }
 
-type ScoreMap map[int]*Score
-func (this ScoreMap) Add(list ScoreList) {
+// 原始总分数据，用于数据的再加工
+type RawScore map[int]*Score
+
+func (this RawScore) Add(list ScoreList) {
 	for _, v := range list {
 		_, ok := this[v.Sid]
 		if !ok {
@@ -76,7 +80,7 @@ func (this ScoreMap) Add(list ScoreList) {
 		}
 	}
 }
-func (this ScoreMap) Transform() ScoreList {
+func (this RawScore) Transform() ScoreList {
 	list := make(ScoreList, 0, len(this))
 	for _, v := range this {
 		list = append(list, *v)
@@ -86,13 +90,13 @@ func (this ScoreMap) Transform() ScoreList {
 }
 
 // 某一科目的小题得分
-type SubscoreMap TableMap
+type RawSubscore RawTable
 type Subscore Table
 
-func (this *SubscoreMap) Transform(title string) *Subscore {
-	if this == nil {
+func (this *RawSubscore) Transform(title string) *Subscore {
+	if this == nil || len(this.Data) == 0 {
 		return nil
 	}
-	table := TableMap(*this).Transform(title)
+	table := RawTable(*this).Transform(title)
 	return (*Subscore)(&table)
 }

@@ -33,7 +33,6 @@ func (this *FromWebsiteCore) ParseExamList(rawData []byte) []string {
 			break
 		}
 	}
-	log.Printf("获取到%d场考试", len(examList))
 	return examList
 }
 
@@ -42,7 +41,6 @@ func (this *FromWebsiteCore) ParseScore(rawData []byte) ScoreList {
 	// 如果没有数据，直接返回nil
 	pos := find(rawData, "没有数据", 0)
 	if pos != -1 {
-		log.Printf("于 #%d 找到定位符`没有数据`", pos)
 		return nil
 	}
 
@@ -52,13 +50,11 @@ func (this *FromWebsiteCore) ParseScore(rawData []byte) ScoreList {
 		log.Printf("意料之外的数据格式：找不到定位符`</tr>`")
 		return nil
 	}
-	log.Printf("于 #%d 找到定位符`</tr>`", pos)
 	pos = find(rawData, "</tr>", pos+5)
 	if pos == -1 {
 		log.Printf("意料之外的数据格式：找不到定位符`</tr>`")
 		return nil
 	}
-	log.Printf("于 #%d 找到定位符`</tr>`", pos)
 	rawData = rawData[pos:]
 
 	pos = 0
@@ -85,8 +81,6 @@ func (this *FromWebsiteCore) ParseScore(rawData []byte) ScoreList {
 			sid, name, object, subject, total, rank,
 		})
 	}
-
-	log.Printf("共获取到 %d 行数据", len(scoreList))
 	return scoreList
 }
 
@@ -109,11 +103,10 @@ func (this *FromWebsiteCore) parseSubscoreRow(rowStr []byte, colLen int) (int, [
 }
 
 // 解析某一科目的小题得分
-func (this *FromWebsiteCore) ParseSubscore(rawData []byte) *SubscoreMap {
+func (this *FromWebsiteCore) ParseSubscore(rawData []byte) *RawSubscore {
 	// 如果没有数据，直接返回nil
 	pos := find(rawData, "没有数据", 0)
 	if pos != -1 && pos <= 5000 {
-		log.Printf("于 #%d 找到定位符`没有数据`", pos)
 		return nil
 	}
 
@@ -122,10 +115,9 @@ func (this *FromWebsiteCore) ParseSubscore(rawData []byte) *SubscoreMap {
 		log.Println("意料之外的数据格式：找不到定位符`</table>`")
 		return nil
 	}
-	log.Printf("于 #%d 找到定位符`</table>`", pos)
 	rawData = rawData[pos:]
 
-	var subscore SubscoreMap
+	var subscore RawSubscore
 
 	// 获取表头
 	index := between(rawData, "<tr", "<tr>", 0)
@@ -136,7 +128,6 @@ func (this *FromWebsiteCore) ParseSubscore(rawData []byte) *SubscoreMap {
 		subscore.Cols = append(subscore.Cols, string(v))
 	}
 	colLen := len(subscore.Cols)
-	log.Printf("共获取到 %d 列标题", colLen)
 
 	// 截取，忽略试题分析
 	pos = find(rawData, "</table>", index[1])
@@ -144,7 +135,6 @@ func (this *FromWebsiteCore) ParseSubscore(rawData []byte) *SubscoreMap {
 		log.Println("意料之外的数据格式：找不到定位符`</table>`")
 		return nil
 	}
-	log.Printf("于 #%d 找到定位符`</table>`", pos)
 	rawData = rawData[index[1]+4 : pos]
 
 	// 获取一行数据
@@ -163,8 +153,6 @@ func (this *FromWebsiteCore) ParseSubscore(rawData []byte) *SubscoreMap {
 	if rowData != nil {
 		subscore.Data[sid] = rowData
 	}
-
-	log.Printf("共获取到 %d 行数据", len(subscore.Data))
 	return &subscore
 }
 
@@ -179,7 +167,6 @@ func (this *FromWebsiteCore) GetExamList() []string {
 
 // 获取某一科目的得分，需要带上“是否文理选科”
 func (this *FromWebsiteCore) GetScore(exam string, class string, subject string) ScoreList {
-	log.Println("正在获取", class, "班的", exam, subject, "得分")
 	postData := &url.Values{
 		"exam_storting": {exam},
 		"km":            {subject},
@@ -209,8 +196,7 @@ func (this *FromWebsiteCore) GetScore(exam string, class string, subject string)
 }
 
 // 获取某一科目的小题得分
-func (this *FromWebsiteCore) GetSubscore(exam string, class string, subject string) *SubscoreMap {
-	log.Println("正在获取", class, "班的", exam, subject, "得分")
+func (this *FromWebsiteCore) GetSubscore(exam string, class string, subject string) *RawSubscore {
 	postdata := &url.Values{
 		"exam_storting": {exam},
 		"km":            {subject},

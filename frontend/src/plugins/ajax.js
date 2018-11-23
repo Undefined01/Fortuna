@@ -49,7 +49,7 @@ function loadCSS (url) {
   })
 }
 
-function loadJS (url, onload) {
+function loadJS (url) {
   return new Promise((resolve, reject) => {
     let body = document.getElementsByTagName('body')[0]
     let script = document.createElement('script')

@@ -13,16 +13,25 @@
       </el-select>
     </step>
     <step id="2">
-      <h4>选择考试：</h4>
-      <el-select
-        v-model="queryParam.exam"
-        placeholder="请选择">
-        <el-option
-          v-for="(item, index) in examList"
-          :key="index"
-          :label="item"
-          :value="item"/>
-      </el-select>
+      <div @dblclick="inputing = true">
+        <h4>选择考试：</h4>
+        <input
+          v-if="inputing"
+          v-model="queryParam.exam"
+          autofocus="autofocus"
+          @blur="inputing = false"
+        >
+        <el-select
+          v-else
+          v-model="queryParam.exam"
+          placeholder="请选择">
+          <el-option
+            v-for="(item, index) in examList"
+            :key="index"
+            :label="item"
+            :value="item"/>
+        </el-select>
+      </div>
     </step>
     <step id="3">
       <btn
@@ -47,6 +56,7 @@ export default {
   components: { elSelect, elOption, step, btn },
   data () {
     return {
+      inputing: false,
       classList: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'],
       examList: [],
       queryParam: { class: '', exam: '' }
@@ -57,7 +67,7 @@ export default {
   },
   methods: {
     UpdateExamList () {
-      ajax.get('http://localhost:8081/api', { type: 'examlist' })
+      ajax.get('http://localhost:8081/api/examlist')
         .then(res => {
           this.examList = JSON.parse(res)
         })
