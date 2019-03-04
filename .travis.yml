@@ -14,9 +14,10 @@ install: ./utils.sh deps
 script: ./utils.sh build
 
 before_deploy:
- - git push https://${GitHub_Token}@github.com/Undefined01/fortuna --delete tag staging
- - git tag --delete staging || echo No previous releases
- - git tag staging
+ - git fetch origin --tag && git tag --list
+ - git tag | grep staging | xargs -n1 git push https://${GitHub_Token}@github.com/Undefined01/fortuna --delete tag || echo No Staging tag deleted
+ - git tag | grep staging | xargs -n1 git tag --delete || echo No Staging tag deleted
+ - git tag staging-$(date "+%m%d-%H%M")
 
 deploy:
   provider: releases

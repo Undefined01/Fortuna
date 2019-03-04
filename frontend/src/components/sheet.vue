@@ -8,7 +8,7 @@
       stripe
       show-summary
       class="maximize"
-      height="85vh">
+      height="calc(100vh - 50px)">
       <el-table-column
         v-for="(item, index) in data.Cols"
         :key="index"
@@ -73,7 +73,7 @@ export default {
       })
       this.data.Data.map(row => {
         row.map((num, i) => {
-          if (!isNaN(Number(num))) {
+          if (!isNaN(Number(num)) && Number(num) !== -1) {
             sum[i] += Number(num)
             count[i]++
           }
@@ -81,7 +81,7 @@ export default {
       })
       this.average = []
       sum.map((sum, i) => {
-        if ((i & 1) === 0) {
+        if (i >= 2) {
           this.average[i] = (sum / count[i]).toFixed(2)
         }
       })

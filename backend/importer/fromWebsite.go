@@ -11,8 +11,16 @@ func NewFromWebsite() *FromWebsite {
 		urlPrefix := "http://192.168.1.88/2016abc"
 		termInfo := "year_in=2016&grade_name=%B8%DF%C8%FD&class_name1=2018-2019%C9%CF%D1%A7%C6%DA"
 	*/
+	/*高三上学期
 	urlPrefix := "http://192.168.206.6/20162018"
 	termInfo := "year_in=2016&grade_name=%B8%DF%C8%FD&class_name1=2018-2019%C9%CF%D1%A7%C6%DA"
+	core := &FromWebsiteCore{
+		ExamUrl:     []byte(urlPrefix + "/dk/top.asp?" + termInfo),
+		ScoreUrl:    []byte(urlPrefix + "/dk/bottom_list_new.asp?" + termInfo),
+		SubscoreUrl: []byte(urlPrefix + "/exam_a_p_g/bottom_list.asp?" + termInfo),
+	}*/
+	urlPrefix := "http://192.168.206.6/20162018"
+	termInfo := "year_in=2016&grade_name=%B8%DF%C8%FD&class_name1=2018-2019%CF%C2%D1%A7%C6%DA"
 	core := &FromWebsiteCore{
 		ExamUrl:     []byte(urlPrefix + "/dk/top.asp?" + termInfo),
 		ScoreUrl:    []byte(urlPrefix + "/dk/bottom_list_new.asp?" + termInfo),

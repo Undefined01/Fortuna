@@ -56,11 +56,14 @@ func GetExamData(exam string, class string) []importer.Table {
 	}
 	parallel.Join()
 
-	for i, v := range result {
-		if i != 7 {
-			sum.Add(v.Score)
+	for i, _ := range subjectList {
+		v, ok := result[i]
+		if ok {
+			if i != 6 {
+				sum.Add(v.Score)
+			}
+			summary.Add(subjectList[i], v.Score, v.Subscore)
 		}
-		summary.Add(subjectList[i], v.Score, v.Subscore)
 	}
 	summary.Add("总分", sum.Transform(), nil)
 

@@ -5,12 +5,12 @@
     </div>
     <div class="container box-effect content">
       <selector @selected="query" />
+      <a
+        ref="anchor"
+        href="#anchor"
+      />
+      <a name="anchor" />
       <expender :width="data.length == 0 ? '100%' : '98vw'">
-        <a
-          ref="anchor"
-          href="#anchor"
-        />
-        <a name="anchor" />
         <presenter :data="data" />
       </expender>
     </div>
@@ -36,15 +36,16 @@ export default {
   methods: {
     query (queryParam, changeState) {
       changeState(1)
-      ajax.get('http://127.0.0.1:8081/api/examdata', {
+      ajax.get('http://localhost:8081/api/examdata', {
         exam: queryParam.exam,
         class: queryParam.class
       }).then(res => {
-        this.$refs.anchor.click()
         this.data = JSON.parse(res)
         changeState(2)
+        this.$nextTick(() => {
+          this.$refs.anchor.click()
+        })
       }).catch(() => {
-        console.log('Query exam data failed!')
         changeState(3)
       })
     }
