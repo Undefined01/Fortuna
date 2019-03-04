@@ -12,7 +12,7 @@ type Table struct {
 // 原始小题分数据，用于数据的再加工
 type RawTable struct {
 	Cols []string
-	Data map[int][]interface{}
+	Data map[string][]interface{}
 }
 
 // 将数据加工为最终数据
@@ -32,6 +32,8 @@ func (this RawTable) Transform(title string) Table {
 type Score struct {
 	/* 学号 */
 	Sid int
+	/* 班级 */
+	Class string
 	/* 姓名 */
 	Name string
 	/* 主观得分 */
@@ -67,16 +69,16 @@ func (this ScoreList) ReRank() {
 }
 
 // 原始总分数据，用于数据的再加工
-type RawScore map[int]*Score
+type RawScore map[string]*Score
 
 func (this RawScore) Add(list ScoreList) {
 	for _, v := range list {
-		_, ok := this[v.Sid]
+		_, ok := this[v.Name]
 		if !ok {
 			newNode := v
-			this[v.Sid] = &newNode
+			this[v.Name] = &newNode
 		} else {
-			this[v.Sid].Total += v.Total
+			this[v.Name].Total += v.Total
 		}
 	}
 }

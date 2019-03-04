@@ -43,11 +43,11 @@ func (this *FromWebsite) Get(exam string, class string, subject string) (ScoreLi
 	}
 	subscore.Cols = append(subscore.Cols, "主观得分", "客观得分", "总分", "级排名")
 	for _, v := range score {
-		p, ok := subscore.Data[v.Sid]
+		p, ok := subscore.Data[v.Name]
 		if !ok {
 			continue
 		}
-		subscore.Data[v.Sid] = append(p, v.Object, v.Subject, v.Total, v.Rank)
+		subscore.Data[v.Name] = append(p, v.Object, v.Subject, v.Total, v.Rank)
 	}
 
 	return score, subscore.Transform(subject)

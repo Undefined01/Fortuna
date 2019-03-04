@@ -72,38 +72,38 @@ func (this *FromWebsiteCore) ParseScore(rawData []byte) ScoreList {
 		}
 
 		sid := toInt(rowData[0])
+		class := string(rowData[11])
 		name := string(rowData[1])
 		object := toFloat(rowData[7])
 		subject := toFloat(rowData[8])
 		total := toFloat(rowData[9])
 		rank := toInt(rowData[6])
 		scoreList = append(scoreList, Score{
-			sid, name, object, subject, total, rank,
+			sid, class, name, object, subject, total, rank,
 		})
 	}
 	return scoreList
 }
 
 // 解析某一行中的详细得分，辅助 ParseSubscore
-func (this *FromWebsiteCore) parseSubscoreRow(rowStr []byte, colLen int) (int, []interface{}) {
+func (this *FromWebsiteCore) parseSubscoreRow(class string, rowStr []byte, colLen int) (string, []interface{}) {
 	row := allBetween(rowStr, "<p align=center>", "</", 0)
 	if len(row) != colLen {
 		log.Printf("意料之外的数据格式：表格长度 %d 不匹配\n原始数据：\n%q", len(row), rowStr)
-		return -1, nil
+		return "", nil
 	}
 
-	sid := toInt(row[0])
 	name := string(row[1])
 	rowData := make([]interface{}, 0, 40)
-	rowData = append(rowData, sid, name)
+	rowData = append(rowData, class, name)
 	for _, v := range row[2:] {
 		rowData = append(rowData, toFloat(v))
 	}
-	return sid, rowData
+	return name, rowData
 }
 
 // 解析某一科目的小题得分
-func (this *FromWebsiteCore) ParseSubscore(rawData []byte) *RawSubscore {
+func (this *FromWebsiteCore) ParseSubscore(class string, rawData []byte) *RawSubscore {
 	// 如果没有数据，直接返回nil
 	pos := find(rawData, "没有数据", 0)
 	if pos != -1 && pos <= 5000 {
@@ -127,6 +127,7 @@ func (this *FromWebsiteCore) ParseSubscore(rawData []byte) *RawSubscore {
 	for _, v := range colsTemp {
 		subscore.Cols = append(subscore.Cols, string(v))
 	}
+	subscore.Cols[0] = "班级"
 	colLen := len(subscore.Cols)
 
 	// 截取，忽略试题分析
@@ -138,20 +139,20 @@ func (this *FromWebsiteCore) ParseSubscore(rawData []byte) *RawSubscore {
 	rawData = rawData[index[1]+4 : pos]
 
 	// 获取一行数据
-	subscore.Data = make(map[int][]interface{})
+	subscore.Data = make(map[string][]interface{})
 	list := allBetween(rawData, "<tr", "<tr", 0)
 	for _, v := range list {
-		sid, rowData := this.parseSubscoreRow(v, colLen)
+		name, rowData := this.parseSubscoreRow(class, v, colLen)
 		if rowData != nil {
-			subscore.Data[sid] = rowData
+			subscore.Data[name] = rowData
 		}
 	}
 
 	// 处理最后一个人
 	lastPerson := between(rawData, string(list[len(list)-1]), "\n", 0)
-	sid, rowData := this.parseSubscoreRow(rawData[lastPerson[0]:lastPerson[1]], colLen)
+	name, rowData := this.parseSubscoreRow(class, rawData[lastPerson[0]:lastPerson[1]], colLen)
 	if rowData != nil {
-		subscore.Data[sid] = rowData
+		subscore.Data[name] = rowData
 	}
 	return &subscore
 }
@@ -207,7 +208,7 @@ func (this *FromWebsiteCore) GetSubscore(exam string, class string, subject stri
 	if rawData == nil {
 		return nil
 	}
-	res := this.ParseSubscore(rawData)
+	res := this.ParseSubscore(class, rawData)
 	if res != nil {
 		return res
 	}
@@ -222,5 +223,5 @@ func (this *FromWebsiteCore) GetSubscore(exam string, class string, subject stri
 	if rawData == nil {
 		return nil
 	}
-	return this.ParseSubscore(rawData)
+	return this.ParseSubscore(class, rawData)
 }

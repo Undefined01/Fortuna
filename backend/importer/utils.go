@@ -12,10 +12,6 @@ import (
 
 // 内部辅助函数，在转换失败时返回-1
 func toInt(str []byte) int {
-	strLen := len(str)
-	if strLen > 6 {
-		str = str[strLen-6:]
-	}
 	num, err := strconv.Atoi(string(str))
 	if err != nil {
 		return -1
